@@ -10,7 +10,7 @@ namespace vo = voro;
 int main(int argc, char const *argv[])
 {
 	po::options_description desc("Allowed options");
-	
+
 	desc.add_options()
 		("help", "produce help message")
 		("input", po::value<std::string>(), "input file")
@@ -33,6 +33,6 @@ int main(int argc, char const *argv[])
                   << std::endl
         ;
     }
-	
+
 	return 0;
 }
