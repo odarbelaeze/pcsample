@@ -14,6 +14,7 @@ set(voro_SOURCES
 )
 
 add_library(voro STATIC ${voro_SOURCES})
+add_library(voroshared SHARED ${voro_SOURCES})
 
 add_executable(voro++ cmd_line.cc)
 target_link_libraries(voro++ voro)
