@@ -1,2 +1,5 @@
+# Thanks to cmake
 build
 
+# Python
+*.pyc
