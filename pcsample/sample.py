@@ -1,9 +1,11 @@
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 #import lxml.etree as et
 #from subprocess import call
 
 # My own utilities
+# -*- coding: utf-8 -*-
+
 import utils
 
 
@@ -133,15 +135,4 @@ class Sample(object):
         return positions[mask]
 
     def positions(self):
-        return np.vstack(in_circles(), out_circles())
-
-
-if __name__ == '__main__':
-    s = Sample(5.0, 5.0, 4.0)
-    in_circles = s.in_circles()
-    out_circles = s.out_circles()
-
-    plt.plot(in_circles[:, 0], in_circles[:, 1], '.r')
-    plt.plot(out_circles[:, 0], out_circles[:, 1], '.g')
-
-    plt.show()
+        return np.vstack(self.in_circles(), self.out_circles())

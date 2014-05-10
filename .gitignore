@@ -3,3 +3,10 @@ build
 
 # Python
 *.pyc
+
+# PyTest
+.coverage
+
+# virtualenv
+.project
+
