@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import numpy as np
 #import matplotlib.pyplot as plt
 #import lxml.etree as et
 #from subprocess import call
 
 # My own utilities
-# -*- coding: utf-8 -*-
 
 import utils
 
