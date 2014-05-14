@@ -10,3 +10,5 @@ build
 # virtualenv
 .project
 
+# Ipython for general checks
+.ipynb_checkpoints
