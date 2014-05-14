@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 from pcsample import Sample
 
 
@@ -26,3 +28,13 @@ def test_x_param_defaults():
 
     assert(s1.x_param() == s1.macro_lattice_parameter())
     assert(s2.x_param() == s2.macro_lattice_parameter())
+
+
+def test_y_param_defaluts():
+    s1 = Sample(5.0, 4.0, 2.0)
+    s2 = Sample(5.0, 4.0, 3.0)
+
+    sin120 = np.sin(np.radians(120))
+
+    assert(s1.y_param() == (sin120 * s1.macro_lattice_parameter()))
+    assert(s2.y_param() == (sin120 * s2.macro_lattice_parameter()))

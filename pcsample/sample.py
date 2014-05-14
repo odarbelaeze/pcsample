@@ -43,7 +43,7 @@ class Sample(object):
         """
         Yields the lattice parameter in the y direction of the lattice.
         """
-        return np.sin(np.degrees(120)) * self.macro_lattice_parameter()
+        return np.sin(np.radians(120)) * self.macro_lattice_parameter()
 
     def x_max(self):
         """
@@ -91,7 +91,7 @@ class Sample(object):
         #TODO: This may be a function, but I'm gessing is only used once
         n = int((self.l * (2 * self.rad + self.d)) ** 2)
         xrand = np.random.uniform(0, self.x_max(), n)
-        yrand = np.random.uniform(0, self.x_max(), n)
+        yrand = np.random.uniform(0, self.y_max(), n)
 
         # TODO: Cache this return
         return np.column_stack((xrand, yrand))
@@ -136,4 +136,4 @@ class Sample(object):
         return positions[mask]
 
     def positions(self):
-        return np.vstack(self.in_circles(), self.out_circles())
+        return np.vstack((self.in_circles(), self.out_circles()))
