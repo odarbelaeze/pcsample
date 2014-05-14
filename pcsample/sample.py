@@ -14,7 +14,8 @@ class Sample(object):
     """docstring for Sample"""
     def __init__(
         self, rad, d, l, a=1.0,
-        tmpprefix="sample", in_rand=False, out_rand=True
+        tmpprefix="sample", in_rand=False, out_rand=True,
+        seed=2902
     ):
 
         super(Sample, self).__init__()
@@ -25,6 +26,7 @@ class Sample(object):
         self.tmpprefix = tmpprefix
         self.in_rand = in_rand
         self.out_rand = out_rand
+        self.seed = seed
 
     def macro_lattice_parameter(self):
         """
@@ -88,6 +90,7 @@ class Sample(object):
         """
         Returns a random lattice filling the whole sample.
         """
+        np.random.seed(self.seed)
         #TODO: This may be a function, but I'm gessing is only used once
         n = int((self.l * (2 * self.rad + self.d)) ** 2)
         xrand = np.random.uniform(0, self.x_max(), n)
