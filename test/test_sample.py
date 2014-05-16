@@ -477,13 +477,13 @@ def test_positions():
 def test_to_string_defaults():
     s = Sample(2, 2, 2)
     correct = STRING_2_2_2_id
-    assert(s.toString() == correct)
+    assert(s.to_string() == correct)
 
 
 def test_to_string_no_id():
     s = Sample(2, 2, 2)
     correct = STRING_2_2_2_no_id
-    assert(s.toString(include_id=False) == correct)
+    assert(s.to_string(include_id=False) == correct)
 
 
 def test_save_creates_file():

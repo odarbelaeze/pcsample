@@ -141,7 +141,7 @@ class Sample(object):
     def positions(self):
         return np.vstack((self.in_circles(), self.out_circles()))
 
-    def toString(self, include_id=True):
+    def to_string(self, include_id=True):
         if include_id:
             lst = [
                 '%i %f %f' % (i, r[0], r[1])
@@ -151,7 +151,6 @@ class Sample(object):
             lst = ['%f %f' % (r[0], r[1]) for r in self.positions()]
         return '\n'.join(lst)
 
-    def save(self, include_id = True):
+    def save(self, include_id=True):
         with open(self.temp_prefix, 'w') as f:
-            f.write(self.toString(include_id))
-    
+            f.write(self.to_string(include_id))
