@@ -3,3 +3,5 @@ matplotlib
 pylint
 pytest
 pytest-cov
+lxml
+

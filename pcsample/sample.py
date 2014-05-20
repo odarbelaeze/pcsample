@@ -2,7 +2,7 @@
 
 import numpy as np
 # import matplotlib.pyplot as plt
-# import lxml.etree as et
+import lxml.etree as ETree
 # from subprocess import call
 
 # My own utilities
@@ -81,7 +81,7 @@ class Sample(object):
         """
         Returns a regular lattice filling the whole sample.
         """
-        # TODO: Cache this return
+        # TODO: Cache regular_lattice lattice
         xtics = np.arange(0.0, self.x_max(), self.a)
         ytics = np.arange(0.0, self.y_max(), self.a)
         return np.array([[x, y] for x in xtics for y in ytics])
@@ -90,13 +90,12 @@ class Sample(object):
         """
         Returns a random lattice filling the whole sample.
         """
+        # TODO: Cache random lattice
         np.random.seed(self.seed)
-        # TODO: This may be a function, but I'm gessing is only used once
         n = int((self.l * (2 * self.rad + self.d)) ** 2)
         xrand = np.random.uniform(0, self.x_max(), n)
         yrand = np.random.uniform(0, self.y_max(), n)
 
-        # TODO: Cache this return
         return np.column_stack((xrand, yrand))
 
     def centers(self):
@@ -112,6 +111,7 @@ class Sample(object):
         """
         Return the portion of the sample inside the circles.
         """
+        # TODO: Cache in circles
         if self.in_rand:
             positions = self.random_lattice()
         else:
@@ -127,6 +127,7 @@ class Sample(object):
         """
         Return the portion of the sample outside the circles.
         """
+        # TODO: Cache out circles
         if self.out_rand:
             positions = self.random_lattice()
         else:
@@ -139,18 +140,97 @@ class Sample(object):
         return positions[mask]
 
     def positions(self):
+        """
+        Returns the combined positions in and out circles.
+        """
         return np.vstack((self.in_circles(), self.out_circles()))
 
-    def to_string(self, include_id=True):
+    def to_string(self, include_id=True, append_dims=0):
+        """
+        Returns a csv like string wiht the positions, `include_id` switchs
+        wether or not an additional column is included with a number for each
+        position.
+        """
         if include_id:
             lst = [
-                '%i %f %f' % (i, r[0], r[1])
+                ('%i %f %f' + ' 0' * append_dims) % (i, r[0], r[1])
                 for i, r in enumerate(self.positions())
             ]
         else:
             lst = ['%f %f' % (r[0], r[1]) for r in self.positions()]
         return '\n'.join(lst)
 
-    def save(self, include_id=True):
+    def save(self, **kwargs):
+        """
+        Saves a csv like file wiht the positions, `kwargs` are passed up
+        to the `to_string` method.
+        """
+        # TODO: Check dependency, if the file is already created,
+        # maybe save some timestamp
         with open(self.temp_prefix, 'w') as f:
-            f.write(self.to_string(include_id))
+            f.write(self.to_string(**kwargs))
+
+    def compute_info(self, script_name='vorop.sh'):
+        from sys import call
+        self.save(append_dims=1)
+        call([
+            script_name,
+            str(self.x_max()), str(self.y_max()),
+            self.temp_prefix,
+        ])
+
+    def load_info(self):
+        pass
+
+    def lattice_name(self):
+        return 'square hex r{0!s} d{1!s} l{2!s} a{3!s}'.format(
+            self.rad, self.d, self.l, self.a
+        )
+
+    def xml_lattice(self):
+        lattice = ETree.Element('LATTICE', attrib={
+            'dimension': '2',
+            'name': self.lattice_name()
+        })
+        basis = ETree.SubElement(lattice, 'BASIS')
+        ETree.SubElement(basis, 'VECTOR').text = "%f 0" % self.x_max()
+        ETree.SubElement(basis, 'VECTOR').text = "0 %f" % self.y_max()
+
+        return lattice
+
+    def finite_lattice_name(self):
+        return 'single square hex r{0!s} d{1!s} l{2!s} a{3!s}'.format(
+            self.rad, self.d, self.l, self.a
+        )
+
+    def xml_finite_lattice(self, ref_lattice=True):
+        finite_lattice = ETree.Element('FINITELATTICE', attrib={
+            'name': self.finite_lattice_name(),
+            'dimension': '2'
+        })
+
+        if ref_lattice:
+            ETree.SubElement(finite_lattice, 'LATTICE', attrib={
+                'ref': self.lattice_name()
+            })
+        else:
+            finite_lattice.append(self.xml_lattice())
+
+        ETree.SubElement(finite_lattice, 'EXTENT', attrib={
+            'dimension': '1',
+            'size': '1'
+        })
+        ETree.SubElement(finite_lattice, 'EXTENT', attrib={
+            'dimension': '2',
+            'size': '1'
+        })
+        ETree.SubElement(finite_lattice, 'BOUNDARY', attrib={
+            'type': 'periodic'
+        })
+        return finite_lattice
+
+    def unitcell_name(self):
+        pass
+
+    def xml_unitcell(self, vertex_types=True, edge_types=True):
+        pass

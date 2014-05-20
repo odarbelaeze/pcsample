@@ -516,3 +516,87 @@ def test_save_writes_right_results_no_id():
     with open(fname, 'r') as f:
         assert(f.read() == STRING_2_2_2_no_id)
     os.remove(fname)
+
+
+def test_lattice_name_defaults():
+    s1 = Sample(2, 2, 2)
+    s2 = Sample(2.0, 2.0, 2.0)
+
+    assert(s1.lattice_name() == 'square hex r2 d2 l2 a1.0')
+    assert(s2.lattice_name() == 'square hex r2.0 d2.0 l2.0 a1.0')
+
+
+def test_xml_lattice_defaults():
+    import lxml.etree as ETree
+
+    s1 = Sample(2, 2, 2)
+    s2 = Sample(2.0, 2.0, 2.0)
+
+    lattice1 = ETree.XML("""\
+<LATTICE dimension="2" name="square hex r2 d2 l2 a1.0">
+  <BASIS>
+    <VECTOR>12.000000 0</VECTOR>
+    <VECTOR>0 10.392305</VECTOR>
+  </BASIS>
+</LATTICE>\
+""")
+
+    lattice2 = ETree.XML("""\
+<LATTICE dimension="2" name="square hex r2.0 d2.0 l2.0 a1.0">
+  <BASIS>
+    <VECTOR>12.000000 0</VECTOR>
+    <VECTOR>0 10.392305</VECTOR>
+  </BASIS>
+</LATTICE>\
+""")
+    assert(ETree.dump(s1.xml_lattice()) == ETree.dump(lattice1))
+    assert(ETree.dump(s2.xml_lattice()) == ETree.dump(lattice2))
+
+
+def test_finite_lattice_name_defaults():
+    s1 = Sample(2, 2, 2)
+    s2 = Sample(2.0, 2.0, 2.0)
+
+    assert(s1.finite_lattice_name() == 'single square hex r2 d2 l2 a1.0')
+    assert(s2.finite_lattice_name() == 'single square hex r2.0 d2.0 l2.0 a1.0')
+
+
+def test_xml_finite_lattice_defaults():
+    import lxml.etree as ETree
+
+    s = Sample(2, 2, 2)
+
+    finite_lattice = ETree.XML("""\
+<FINITELATTICE dimension="2" name="single square hex r2 d2 l2 a1.0">
+  <LATTICE ref="square hex r2 d2 l2 a1.0"/>
+  <EXTENT dimension="1" size="1"/>
+  <EXTENT dimension="2" size="1"/>
+  <BOUNDARY type="periodic"/>
+</FINITELATTICE>\
+""")
+
+    assert(ETree.dump(s.xml_finite_lattice()) == ETree.dump(finite_lattice))
+
+
+def test_xml_finite_lattice_no_ref():
+    import lxml.etree as ETree
+
+    s = Sample(2, 2, 2)
+
+    ref_finite_lattice = ETree.XML("""\
+<FINITELATTICE dimension="2" name="single square hex r2 d2 l2 a1.0">
+  <LATTICE dimension="2" name="square hex r2 d2 l2 a1.0">
+    <BASIS>
+      <VECTOR>12.000000 0</VECTOR>
+      <VECTOR>0 10.392305</VECTOR>
+    </BASIS>
+  </LATTICE>
+  <EXTENT dimension="1" size="1"/>
+  <EXTENT dimension="2" size="1"/>
+  <BOUNDARY type="periodic"/>
+</FINITELATTICE>\
+""")
+
+    finite_lattice = s.xml_finite_lattice(ref_lattice=False)
+
+    assert(ETree.dump(ref_finite_lattice) == ETree.dump(finite_lattice))
