@@ -171,6 +171,12 @@ class Sample(object):
             f.write(self.to_string(**kwargs))
 
     def compute_info(self, script_name='vorop.sh'):
+        """
+        Calls a script in the system responsible of creating the neighborhood
+        files.
+        """
+        # TODO: Implement a little python interface for voro++ to leverage this
+        #       subprocess call.
         from subprocess import call
         self.save(append_dims=1)
         call([
@@ -180,7 +186,43 @@ class Sample(object):
         ])
 
     def load_info(self):
-        pass
+        """
+        Load and returns the information created by the `compute_info`method
+        returns a dictionary where the keys are the particle id and the values
+        are yet another dictionary containing several useful data such as the
+        neighborhood, and coordinates.
+        """
+        info = dict()
+
+        coordinates = {
+            'coordinates': open(self.temp_prefix, 'r'),
+        }
+
+        nb_files = {
+            'np': open(self.temp_prefix + 'np.vol', 'r'),
+            'px': open(self.temp_prefix + 'px.vol', 'r'),
+            'py': open(self.temp_prefix + 'py.vol', 'r'),
+        }
+
+        for key in coordinates:
+            for line in coordinates[key]:
+                vertex_id = int(line.split()[0])
+                pl = [float(number) for number in line.split()]
+                info[vertex_id] = {key: np.array(pl[1:])}
+
+        for key in nb_files:
+            for line in nb_files[key]:
+                pl = [int(number) for number in line.split()]
+                vertex_id = pl[0]
+                if key == 'np':
+                    info[vertex_id][key] = [nb for nb in pl[1:] if nb > 0]
+                else:
+                    info[vertex_id][key] = [
+                        nb for nb in pl[1:] if nb > 0
+                        if nb not in info[vertex_id]['np']
+                    ]
+
+        return info
 
     def lattice_name(self):
         return 'square hex r{0!s} d{1!s} l{2!s} a{3!s}'.format(
