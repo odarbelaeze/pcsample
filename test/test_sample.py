@@ -508,7 +508,7 @@ def test_save_writes_right_results_id():
 
 
 def test_save_writes_right_results_no_id():
-    fname = 'test_file'
+    fname = 'test_sample'
     s = Sample(2, 2, 2, temp_prefix=fname)
     s.save(include_id=False)
 
@@ -516,6 +516,27 @@ def test_save_writes_right_results_no_id():
     with open(fname, 'r') as f:
         assert(f.read() == STRING_2_2_2_no_id)
     os.remove(fname)
+
+
+def test_compute_info_writes_files():
+    import os
+    prefix = 'test_sample'
+    s = Sample(2, 2, 2, temp_prefix=prefix)
+    s.compute_info()
+    sufixes = [
+        'pxpy.vol',
+        'px.vol',
+        'py.vol',
+        'np.vol',
+        '.vol',
+        '.gnu',
+    ]
+    assert(all([os.path.isfile(prefix + sufix) for sufix in sufixes]))
+    map(os.remove, [prefix + sufix for sufix in sufixes])
+    os.remove(prefix)
+
+def test_load_info_defaults():
+    assert(False)
 
 
 def test_lattice_name_defaults():

@@ -171,7 +171,7 @@ class Sample(object):
             f.write(self.to_string(**kwargs))
 
     def compute_info(self, script_name='vorop.sh'):
-        from sys import call
+        from subprocess import call
         self.save(append_dims=1)
         call([
             script_name,
