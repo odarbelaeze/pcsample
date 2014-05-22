@@ -1353,6 +1353,13 @@ def test_load_info_defaults():
 
     s.compute_info()
     info = s.load_info()
+
+    import os
+    import glob
+
+    for match in glob.glob(s.temp_prefix + '*'):
+        os.remove(match)
+
     assert(all([
         (info[i]['coordinates'] == info_ref[i]['coordinates']).all()
         for i in info_ref
