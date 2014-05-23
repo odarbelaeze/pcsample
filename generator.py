@@ -30,7 +30,7 @@ def main():
         f.write(ETree.tostring(lattices, pretty_print=True))
 
     params = ''
-    params += 'LATTICE_LIBRARY="../lattices.xml"' + '\n'
+    params += 'LATTICE_LIBRARY="lattices.xml"' + '\n'
     params += 'MODEL="Ising"' + '\n'
     params += 'UPDATE="cluster"' + '\n'
     params += 'TERMALIZATION=50000' + '\n'
