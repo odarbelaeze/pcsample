@@ -302,7 +302,7 @@ class Sample(object):
             if ox or oy:
                 offx = 0 if ox else 1 if (rj[0] < ri[0]) else - 1
                 offy = 0 if oy else 1 if (rj[1] < ri[1]) else - 1
-                return {'ofset': str(offx) + ' ' + str(offy)}
+                return {'offset': str(offx) + ' ' + str(offy)}
             else:
                 return dict()
 

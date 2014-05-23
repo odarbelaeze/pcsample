@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import lxml.etree as ETree
 
 from pcsample import Sample
 
+
+def clear_info(sample):
+    import os
+    import glob
+    for match in glob.glob(sample.temp_prefix + '*'):
+        os.remove(match)
 
 STRING_2_2_2_id = """\
 0 0.000000 0.000000
@@ -1540,8 +1547,6 @@ def test_lattice_name_defaults():
 
 
 def test_xml_lattice_defaults():
-    import lxml.etree as ETree
-
     s1 = Sample(2, 2, 2)
     s2 = Sample(2.0, 2.0, 2.0)
 
@@ -1575,8 +1580,6 @@ def test_finite_lattice_name_defaults():
 
 
 def test_xml_finite_lattice_defaults():
-    import lxml.etree as ETree
-
     s = Sample(2, 2, 2)
 
     finite_lattice = ETree.XML("""\
@@ -1592,8 +1595,6 @@ def test_xml_finite_lattice_defaults():
 
 
 def test_xml_finite_lattice_no_ref():
-    import lxml.etree as ETree
-
     s = Sample(2, 2, 2)
 
     ref_finite_lattice = ETree.XML("""\
@@ -1613,3 +1614,1966 @@ def test_xml_finite_lattice_no_ref():
     finite_lattice = s.xml_finite_lattice(ref_lattice=False)
 
     assert(ETree.dump(ref_finite_lattice) == ETree.dump(finite_lattice))
+
+
+def test_unitcell_name_defaults():
+    s = Sample(2, 2, 2)
+    assert(s.unitcell_name() == 'composed r2 d2 l2 a1.0')
+
+
+def test_xml_unitcell_default():
+    ref_unitcell = ETree.XML("""\
+<UNITCELL dimension="2" name="composed r2 d2 l2 a1.0" vertices="135">
+  <VERTEX id="1" type="1">
+    <COORDINATE>0.0 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="2" type="1">
+    <COORDINATE>0.0 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="3" type="1">
+    <COORDINATE>0.0 0.19245008973</COORDINATE>
+  </VERTEX>
+  <VERTEX id="4" type="1">
+    <COORDINATE>0.0 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="5" type="1">
+    <COORDINATE>0.0 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="6" type="1">
+    <COORDINATE>0.0833333333333 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="7" type="1">
+    <COORDINATE>0.0833333333333 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="8" type="1">
+    <COORDINATE>0.0833333333333 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="9" type="1">
+    <COORDINATE>0.0833333333333 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="10" type="1">
+    <COORDINATE>0.166666666667 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="11" type="1">
+    <COORDINATE>0.166666666667 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="12" type="1">
+    <COORDINATE>0.166666666667 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="13" type="1">
+    <COORDINATE>0.166666666667 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="14" type="1">
+    <COORDINATE>0.25 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="15" type="1">
+    <COORDINATE>0.25 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="16" type="1">
+    <COORDINATE>0.25 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="17" type="1">
+    <COORDINATE>0.25 0.673575314055</COORDINATE>
+  </VERTEX>
+  <VERTEX id="18" type="1">
+    <COORDINATE>0.333333333333 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="19" type="1">
+    <COORDINATE>0.333333333333 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="20" type="1">
+    <COORDINATE>0.333333333333 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="21" type="1">
+    <COORDINATE>0.333333333333 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="22" type="1">
+    <COORDINATE>0.416666666667 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="23" type="1">
+    <COORDINATE>0.416666666667 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="24" type="1">
+    <COORDINATE>0.416666666667 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="25" type="1">
+    <COORDINATE>0.416666666667 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="26" type="1">
+    <COORDINATE>0.5 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="27" type="1">
+    <COORDINATE>0.5 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="28" type="1">
+    <COORDINATE>0.5 0.19245008973</COORDINATE>
+  </VERTEX>
+  <VERTEX id="29" type="1">
+    <COORDINATE>0.5 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="30" type="1">
+    <COORDINATE>0.5 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="31" type="1">
+    <COORDINATE>0.583333333333 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="32" type="1">
+    <COORDINATE>0.583333333333 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="33" type="1">
+    <COORDINATE>0.583333333333 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="34" type="1">
+    <COORDINATE>0.583333333333 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="35" type="1">
+    <COORDINATE>0.666666666667 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="36" type="1">
+    <COORDINATE>0.666666666667 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="37" type="1">
+    <COORDINATE>0.666666666667 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="38" type="1">
+    <COORDINATE>0.666666666667 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="39" type="1">
+    <COORDINATE>0.75 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="40" type="1">
+    <COORDINATE>0.75 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="41" type="1">
+    <COORDINATE>0.75 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="42" type="1">
+    <COORDINATE>0.75 0.673575314055</COORDINATE>
+  </VERTEX>
+  <VERTEX id="43" type="1">
+    <COORDINATE>0.833333333333 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="44" type="1">
+    <COORDINATE>0.833333333333 0.38490017946</COORDINATE>
+  </VERTEX>
+  <VERTEX id="45" type="1">
+    <COORDINATE>0.833333333333 0.481125224325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="46" type="1">
+    <COORDINATE>0.833333333333 0.57735026919</COORDINATE>
+  </VERTEX>
+  <VERTEX id="47" type="1">
+    <COORDINATE>0.916666666667 0.0</COORDINATE>
+  </VERTEX>
+  <VERTEX id="48" type="1">
+    <COORDINATE>0.916666666667 0.0962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="49" type="1">
+    <COORDINATE>0.916666666667 0.866025403784</COORDINATE>
+  </VERTEX>
+  <VERTEX id="50" type="1">
+    <COORDINATE>0.916666666667 0.962250448649</COORDINATE>
+  </VERTEX>
+  <VERTEX id="51" type="2">
+    <COORDINATE>0.681105833333 0.239814751114</COORDINATE>
+  </VERTEX>
+  <VERTEX id="52" type="2">
+    <COORDINATE>0.568020083333 0.637120840708</COORDINATE>
+  </VERTEX>
+  <VERTEX id="53" type="2">
+    <COORDINATE>0.573616833333 0.265171108911</COORDINATE>
+  </VERTEX>
+  <VERTEX id="54" type="2">
+    <COORDINATE>0.72815225 0.894253501821</COORDINATE>
+  </VERTEX>
+  <VERTEX id="55" type="2">
+    <COORDINATE>0.690618833333 0.78942564927</COORDINATE>
+  </VERTEX>
+  <VERTEX id="56" type="2">
+    <COORDINATE>0.753317583333 0.0640204468495</COORDINATE>
+  </VERTEX>
+  <VERTEX id="57" type="2">
+    <COORDINATE>0.495609083333 0.524840839557</COORDINATE>
+  </VERTEX>
+  <VERTEX id="58" type="2">
+    <COORDINATE>0.285162 0.881633972087</COORDINATE>
+  </VERTEX>
+  <VERTEX id="59" type="2">
+    <COORDINATE>0.5106375 0.642581323329</COORDINATE>
+  </VERTEX>
+  <VERTEX id="60" type="2">
+    <COORDINATE>0.746001666667 0.830714949996</COORDINATE>
+  </VERTEX>
+  <VERTEX id="61" type="2">
+    <COORDINATE>0.961096 0.790522999681</COORDINATE>
+  </VERTEX>
+  <VERTEX id="62" type="2">
+    <COORDINATE>0.47323675 0.627655375494</COORDINATE>
+  </VERTEX>
+  <VERTEX id="63" type="2">
+    <COORDINATE>0.284661 0.217233234935</COORDINATE>
+  </VERTEX>
+  <VERTEX id="64" type="2">
+    <COORDINATE>0.7941415 0.285436776935</COORDINATE>
+  </VERTEX>
+  <VERTEX id="65" type="2">
+    <COORDINATE>0.316729916667 0.133772827172</COORDINATE>
+  </VERTEX>
+  <VERTEX id="66" type="2">
+    <COORDINATE>0.113141416667 0.743841536116</COORDINATE>
+  </VERTEX>
+  <VERTEX id="67" type="2">
+    <COORDINATE>0.80353325 0.793819573493</COORDINATE>
+  </VERTEX>
+  <VERTEX id="68" type="2">
+    <COORDINATE>0.0720168333333 0.249572355563</COORDINATE>
+  </VERTEX>
+  <VERTEX id="69" type="2">
+    <COORDINATE>0.682328083333 0.756555655069</COORDINATE>
+  </VERTEX>
+  <VERTEX id="70" type="2">
+    <COORDINATE>0.825528666667 0.772078390632</COORDINATE>
+  </VERTEX>
+  <VERTEX id="71" type="2">
+    <COORDINATE>0.699137833333 0.930941320901</COORDINATE>
+  </VERTEX>
+  <VERTEX id="72" type="2">
+    <COORDINATE>0.14788775 0.732908254069</COORDINATE>
+  </VERTEX>
+  <VERTEX id="73" type="2">
+    <COORDINATE>0.972759416667 0.392993475533</COORDINATE>
+  </VERTEX>
+  <VERTEX id="74" type="2">
+    <COORDINATE>0.0881558333333 0.214211479851</COORDINATE>
+  </VERTEX>
+  <VERTEX id="75" type="2">
+    <COORDINATE>0.2328975 0.75176335916</COORDINATE>
+  </VERTEX>
+  <VERTEX id="76" type="2">
+    <COORDINATE>0.15907325 0.32734499715</COORDINATE>
+  </VERTEX>
+  <VERTEX id="77" type="2">
+    <COORDINATE>0.738778833333 0.762631785527</COORDINATE>
+  </VERTEX>
+  <VERTEX id="78" type="2">
+    <COORDINATE>0.949025666667 0.559396696544</COORDINATE>
+  </VERTEX>
+  <VERTEX id="79" type="2">
+    <COORDINATE>0.643883583333 0.140498476682</COORDINATE>
+  </VERTEX>
+  <VERTEX id="80" type="2">
+    <COORDINATE>0.36836725 0.672507216057</COORDINATE>
+  </VERTEX>
+  <VERTEX id="81" type="2">
+    <COORDINATE>0.426033416667 0.777944365592</COORDINATE>
+  </VERTEX>
+  <VERTEX id="82" type="2">
+    <COORDINATE>0.762715083333 0.876328892913</COORDINATE>
+  </VERTEX>
+  <VERTEX id="83" type="2">
+    <COORDINATE>0.0580504166667 0.42432107849</COORDINATE>
+  </VERTEX>
+  <VERTEX id="84" type="2">
+    <COORDINATE>0.56185 0.409721910908</COORDINATE>
+  </VERTEX>
+  <VERTEX id="85" type="2">
+    <COORDINATE>0.44274375 0.700317986073</COORDINATE>
+  </VERTEX>
+  <VERTEX id="86" type="2">
+    <COORDINATE>0.83128925 0.671972397257</COORDINATE>
+  </VERTEX>
+  <VERTEX id="87" type="2">
+    <COORDINATE>0.599447333333 0.825997613396</COORDINATE>
+  </VERTEX>
+  <VERTEX id="88" type="2">
+    <COORDINATE>0.274843166667 0.287266399938</COORDINATE>
+  </VERTEX>
+  <VERTEX id="89" type="2">
+    <COORDINATE>0.0724763333333 0.579107915859</COORDINATE>
+  </VERTEX>
+  <VERTEX id="90" type="2">
+    <COORDINATE>0.65689975 0.235053343444</COORDINATE>
+  </VERTEX>
+  <VERTEX id="91" type="2">
+    <COORDINATE>0.463277416667 0.718355178283</COORDINATE>
+  </VERTEX>
+  <VERTEX id="92" type="2">
+    <COORDINATE>0.661675 0.905422439003</COORDINATE>
+  </VERTEX>
+  <VERTEX id="93" type="2">
+    <COORDINATE>0.583796666667 0.574344391238</COORDINATE>
+  </VERTEX>
+  <VERTEX id="94" type="2">
+    <COORDINATE>0.75016475 0.888544566134</COORDINATE>
+  </VERTEX>
+  <VERTEX id="95" type="2">
+    <COORDINATE>0.182690416667 0.123645622325</COORDINATE>
+  </VERTEX>
+  <VERTEX id="96" type="2">
+    <COORDINATE>0.0359438333333 0.410832732826</COORDINATE>
+  </VERTEX>
+  <VERTEX id="97" type="2">
+    <COORDINATE>0.797599583333 0.304260993787</COORDINATE>
+  </VERTEX>
+  <VERTEX id="98" type="2">
+    <COORDINATE>0.149449833333 0.803729117289</COORDINATE>
+  </VERTEX>
+  <VERTEX id="99" type="2">
+    <COORDINATE>0.5514865 0.782549792464</COORDINATE>
+  </VERTEX>
+  <VERTEX id="100" type="2">
+    <COORDINATE>0.790585583333 0.700845972895</COORDINATE>
+  </VERTEX>
+  <VERTEX id="101" type="2">
+    <COORDINATE>0.850271916667 0.189192487061</COORDINATE>
+  </VERTEX>
+  <VERTEX id="102" type="2">
+    <COORDINATE>0.0585185 0.217999090067</COORDINATE>
+  </VERTEX>
+  <VERTEX id="103" type="2">
+    <COORDINATE>0.270191416667 0.961257791087</COORDINATE>
+  </VERTEX>
+  <VERTEX id="104" type="2">
+    <COORDINATE>0.264937 0.894373398227</COORDINATE>
+  </VERTEX>
+  <VERTEX id="105" type="2">
+    <COORDINATE>0.134065333333 0.861937090303</COORDINATE>
+  </VERTEX>
+  <VERTEX id="106" type="2">
+    <COORDINATE>0.568987416667 0.666484105598</COORDINATE>
+  </VERTEX>
+  <VERTEX id="107" type="2">
+    <COORDINATE>0.627056583333 0.826218546099</COORDINATE>
+  </VERTEX>
+  <VERTEX id="108" type="2">
+    <COORDINATE>0.762208833333 0.251349728367</COORDINATE>
+  </VERTEX>
+  <VERTEX id="109" type="2">
+    <COORDINATE>0.56508775 0.601464554108</COORDINATE>
+  </VERTEX>
+  <VERTEX id="110" type="2">
+    <COORDINATE>0.167991833333 0.284521772983</COORDINATE>
+  </VERTEX>
+  <VERTEX id="111" type="2">
+    <COORDINATE>0.171216166667 0.695182166754</COORDINATE>
+  </VERTEX>
+  <VERTEX id="112" type="2">
+    <COORDINATE>0.216642583333 0.0322599274162</COORDINATE>
+  </VERTEX>
+  <VERTEX id="113" type="2">
+    <COORDINATE>0.76299225 0.0508132707667</COORDINATE>
+  </VERTEX>
+  <VERTEX id="114" type="2">
+    <COORDINATE>0.342465416667 0.06406432547</COORDINATE>
+  </VERTEX>
+  <VERTEX id="115" type="2">
+    <COORDINATE>0.922348333333 0.474685844322</COORDINATE>
+  </VERTEX>
+  <VERTEX id="116" type="2">
+    <COORDINATE>0.139207583333 0.868105981705</COORDINATE>
+  </VERTEX>
+  <VERTEX id="117" type="2">
+    <COORDINATE>0.766898416667 0.193558794697</COORDINATE>
+  </VERTEX>
+  <VERTEX id="118" type="2">
+    <COORDINATE>0.324893916667 0.917431709503</COORDINATE>
+  </VERTEX>
+  <VERTEX id="119" type="2">
+    <COORDINATE>0.2193075 0.73922725654</COORDINATE>
+  </VERTEX>
+  <VERTEX id="120" type="2">
+    <COORDINATE>0.676272583333 0.83870220607</COORDINATE>
+  </VERTEX>
+  <VERTEX id="121" type="2">
+    <COORDINATE>0.325953 0.239307645127</COORDINATE>
+  </VERTEX>
+  <VERTEX id="122" type="2">
+    <COORDINATE>0.693371583333 0.0958108922718</COORDINATE>
+  </VERTEX>
+  <VERTEX id="123" type="2">
+    <COORDINATE>0.33990475 0.325980141113</COORDINATE>
+  </VERTEX>
+  <VERTEX id="124" type="2">
+    <COORDINATE>0.88919875 0.345886216144</COORDINATE>
+  </VERTEX>
+  <VERTEX id="125" type="2">
+    <COORDINATE>0.0681411666667 0.764701682467</COORDINATE>
+  </VERTEX>
+  <VERTEX id="126" type="2">
+    <COORDINATE>0.844530166667 0.270332524093</COORDINATE>
+  </VERTEX>
+  <VERTEX id="127" type="2">
+    <COORDINATE>0.200456083333 0.307511475802</COORDINATE>
+  </VERTEX>
+  <VERTEX id="128" type="2">
+    <COORDINATE>0.9689895 0.758754974695</COORDINATE>
+  </VERTEX>
+  <VERTEX id="129" type="2">
+    <COORDINATE>0.252128416667 0.971856979778</COORDINATE>
+  </VERTEX>
+  <VERTEX id="130" type="2">
+    <COORDINATE>0.666998833333 0.039219211336</COORDINATE>
+  </VERTEX>
+  <VERTEX id="131" type="2">
+    <COORDINATE>0.126215083333 0.148392202013</COORDINATE>
+  </VERTEX>
+  <VERTEX id="132" type="2">
+    <COORDINATE>0.0141970833333 0.37283673426</COORDINATE>
+  </VERTEX>
+  <VERTEX id="133" type="2">
+    <COORDINATE>0.525269333333 0.408894567972</COORDINATE>
+  </VERTEX>
+  <VERTEX id="134" type="2">
+    <COORDINATE>0.684993666667 0.149676806362</COORDINATE>
+  </VERTEX>
+  <VERTEX id="135" type="2">
+    <COORDINATE>0.0922025833333 0.72002083381</COORDINATE>
+  </VERTEX>
+  <EDGE type="1">
+    <SOURCE vertex="1"/>
+    <TARGET vertex="6"/>
+  </EDGE>
+  <EDGE type="2">
+    <SOURCE vertex="1"/>
+    <TARGET offset="-1 0" vertex="5"/>
+  </EDGE>
+  <EDGE type="3">
+    <SOURCE vertex="1"/>
+    <TARGET offset="0 -1" vertex="47"/>
+  </EDGE>
+  <EDGE type="4">
+    <SOURCE vertex="1"/>
+    <TARGET vertex="2"/>
+  </EDGE>
+  <EDGE type="5">
+    <SOURCE vertex="2"/>
+    <TARGET vertex="7"/>
+  </EDGE>
+  <EDGE type="6">
+    <SOURCE vertex="2"/>
+    <TARGET offset="0 -1" vertex="48"/>
+  </EDGE>
+  <EDGE type="7">
+    <SOURCE vertex="2"/>
+    <TARGET vertex="3"/>
+  </EDGE>
+  <EDGE type="8">
+    <SOURCE vertex="3"/>
+    <TARGET vertex="7"/>
+  </EDGE>
+  <EDGE type="9">
+    <SOURCE vertex="3"/>
+    <TARGET vertex="102"/>
+  </EDGE>
+  <EDGE type="10">
+    <SOURCE vertex="3"/>
+    <TARGET offset="0 -1" vertex="126"/>
+  </EDGE>
+  <EDGE type="11">
+    <SOURCE vertex="3"/>
+    <TARGET offset="0 -1" vertex="124"/>
+  </EDGE>
+  <EDGE type="12">
+    <SOURCE vertex="3"/>
+    <TARGET offset="0 1" vertex="101"/>
+  </EDGE>
+  <EDGE type="13">
+    <SOURCE vertex="3"/>
+    <TARGET offset="0 1" vertex="48"/>
+  </EDGE>
+  <EDGE type="14">
+    <SOURCE vertex="3"/>
+    <TARGET offset="0 -1" vertex="132"/>
+  </EDGE>
+  <EDGE type="15">
+    <SOURCE vertex="3"/>
+    <TARGET vertex="68"/>
+  </EDGE>
+  <EDGE type="16">
+    <SOURCE vertex="4"/>
+    <TARGET vertex="125"/>
+  </EDGE>
+  <EDGE type="17">
+    <SOURCE vertex="4"/>
+    <TARGET vertex="8"/>
+  </EDGE>
+  <EDGE type="18">
+    <SOURCE vertex="4"/>
+    <TARGET offset="0 -1" vertex="49"/>
+  </EDGE>
+  <EDGE type="19">
+    <SOURCE vertex="4"/>
+    <TARGET vertex="5"/>
+  </EDGE>
+  <EDGE type="20">
+    <SOURCE vertex="4"/>
+    <TARGET offset="0 1" vertex="61"/>
+  </EDGE>
+  <EDGE type="21">
+    <SOURCE vertex="5"/>
+    <TARGET vertex="9"/>
+  </EDGE>
+  <EDGE type="22">
+    <SOURCE vertex="5"/>
+    <TARGET offset="0 -1" vertex="50"/>
+  </EDGE>
+  <EDGE type="23">
+    <SOURCE vertex="6"/>
+    <TARGET offset="-1 0" vertex="9"/>
+  </EDGE>
+  <EDGE type="24">
+    <SOURCE vertex="6"/>
+    <TARGET vertex="7"/>
+  </EDGE>
+  <EDGE type="25">
+    <SOURCE vertex="6"/>
+    <TARGET vertex="10"/>
+  </EDGE>
+  <EDGE type="26">
+    <SOURCE vertex="7"/>
+    <TARGET vertex="131"/>
+  </EDGE>
+  <EDGE type="27">
+    <SOURCE vertex="7"/>
+    <TARGET vertex="74"/>
+  </EDGE>
+  <EDGE type="28">
+    <SOURCE vertex="7"/>
+    <TARGET vertex="10"/>
+  </EDGE>
+  <EDGE type="29">
+    <SOURCE vertex="7"/>
+    <TARGET vertex="102"/>
+  </EDGE>
+  <EDGE type="30">
+    <SOURCE vertex="7"/>
+    <TARGET vertex="95"/>
+  </EDGE>
+  <EDGE type="31">
+    <SOURCE vertex="8"/>
+    <TARGET vertex="98"/>
+  </EDGE>
+  <EDGE type="32">
+    <SOURCE vertex="8"/>
+    <TARGET vertex="105"/>
+  </EDGE>
+  <EDGE type="33">
+    <SOURCE vertex="8"/>
+    <TARGET vertex="9"/>
+  </EDGE>
+  <EDGE type="34">
+    <SOURCE vertex="8"/>
+    <TARGET vertex="125"/>
+  </EDGE>
+  <EDGE type="35">
+    <SOURCE vertex="8"/>
+    <TARGET vertex="116"/>
+  </EDGE>
+  <EDGE type="36">
+    <SOURCE vertex="9"/>
+    <TARGET offset="-1 0" vertex="10"/>
+  </EDGE>
+  <EDGE type="37">
+    <SOURCE vertex="9"/>
+    <TARGET vertex="116"/>
+  </EDGE>
+  <EDGE type="38">
+    <SOURCE vertex="10"/>
+    <TARGET offset="1 0" vertex="116"/>
+  </EDGE>
+  <EDGE type="39">
+    <SOURCE vertex="10"/>
+    <TARGET vertex="95"/>
+  </EDGE>
+  <EDGE type="40">
+    <SOURCE vertex="10"/>
+    <TARGET vertex="112"/>
+  </EDGE>
+  <EDGE type="41">
+    <SOURCE vertex="10"/>
+    <TARGET offset="-1 0" vertex="129"/>
+  </EDGE>
+  <EDGE type="42">
+    <SOURCE vertex="11"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="43">
+    <SOURCE vertex="11"/>
+    <TARGET vertex="14"/>
+  </EDGE>
+  <EDGE type="44">
+    <SOURCE vertex="11"/>
+    <TARGET vertex="12"/>
+  </EDGE>
+  <EDGE type="45">
+    <SOURCE vertex="11"/>
+    <TARGET vertex="83"/>
+  </EDGE>
+  <EDGE type="46">
+    <SOURCE vertex="11"/>
+    <TARGET vertex="76"/>
+  </EDGE>
+  <EDGE type="47">
+    <SOURCE vertex="12"/>
+    <TARGET vertex="15"/>
+  </EDGE>
+  <EDGE type="48">
+    <SOURCE vertex="12"/>
+    <TARGET vertex="89"/>
+  </EDGE>
+  <EDGE type="49">
+    <SOURCE vertex="12"/>
+    <TARGET vertex="83"/>
+  </EDGE>
+  <EDGE type="50">
+    <SOURCE vertex="12"/>
+    <TARGET vertex="13"/>
+  </EDGE>
+  <EDGE type="51">
+    <SOURCE vertex="13"/>
+    <TARGET vertex="16"/>
+  </EDGE>
+  <EDGE type="52">
+    <SOURCE vertex="13"/>
+    <TARGET vertex="89"/>
+  </EDGE>
+  <EDGE type="53">
+    <SOURCE vertex="13"/>
+    <TARGET vertex="111"/>
+  </EDGE>
+  <EDGE type="54">
+    <SOURCE vertex="13"/>
+    <TARGET vertex="17"/>
+  </EDGE>
+  <EDGE type="55">
+    <SOURCE vertex="14"/>
+    <TARGET vertex="123"/>
+  </EDGE>
+  <EDGE type="56">
+    <SOURCE vertex="14"/>
+    <TARGET vertex="19"/>
+  </EDGE>
+  <EDGE type="57">
+    <SOURCE vertex="14"/>
+    <TARGET vertex="15"/>
+  </EDGE>
+  <EDGE type="58">
+    <SOURCE vertex="14"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="59">
+    <SOURCE vertex="14"/>
+    <TARGET vertex="88"/>
+  </EDGE>
+  <EDGE type="60">
+    <SOURCE vertex="15"/>
+    <TARGET vertex="16"/>
+  </EDGE>
+  <EDGE type="61">
+    <SOURCE vertex="15"/>
+    <TARGET vertex="20"/>
+  </EDGE>
+  <EDGE type="62">
+    <SOURCE vertex="16"/>
+    <TARGET vertex="21"/>
+  </EDGE>
+  <EDGE type="63">
+    <SOURCE vertex="16"/>
+    <TARGET vertex="17"/>
+  </EDGE>
+  <EDGE type="64">
+    <SOURCE vertex="17"/>
+    <TARGET vertex="80"/>
+  </EDGE>
+  <EDGE type="65">
+    <SOURCE vertex="17"/>
+    <TARGET vertex="21"/>
+  </EDGE>
+  <EDGE type="66">
+    <SOURCE vertex="17"/>
+    <TARGET vertex="119"/>
+  </EDGE>
+  <EDGE type="67">
+    <SOURCE vertex="17"/>
+    <TARGET vertex="111"/>
+  </EDGE>
+  <EDGE type="68">
+    <SOURCE vertex="17"/>
+    <TARGET vertex="75"/>
+  </EDGE>
+  <EDGE type="69">
+    <SOURCE vertex="18"/>
+    <TARGET offset="-1 0" vertex="25"/>
+  </EDGE>
+  <EDGE type="70">
+    <SOURCE vertex="18"/>
+    <TARGET vertex="22"/>
+  </EDGE>
+  <EDGE type="71">
+    <SOURCE vertex="18"/>
+    <TARGET offset="1 0" vertex="118"/>
+  </EDGE>
+  <EDGE type="72">
+    <SOURCE vertex="18"/>
+    <TARGET offset="1 0" vertex="103"/>
+  </EDGE>
+  <EDGE type="73">
+    <SOURCE vertex="18"/>
+    <TARGET vertex="112"/>
+  </EDGE>
+  <EDGE type="74">
+    <SOURCE vertex="18"/>
+    <TARGET vertex="114"/>
+  </EDGE>
+  <EDGE type="75">
+    <SOURCE vertex="18"/>
+    <TARGET offset="1 0" vertex="129"/>
+  </EDGE>
+  <EDGE type="76">
+    <SOURCE vertex="19"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="77">
+    <SOURCE vertex="19"/>
+    <TARGET vertex="123"/>
+  </EDGE>
+  <EDGE type="78">
+    <SOURCE vertex="19"/>
+    <TARGET vertex="20"/>
+  </EDGE>
+  <EDGE type="79">
+    <SOURCE vertex="20"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="80">
+    <SOURCE vertex="20"/>
+    <TARGET vertex="57"/>
+  </EDGE>
+  <EDGE type="81">
+    <SOURCE vertex="20"/>
+    <TARGET vertex="21"/>
+  </EDGE>
+  <EDGE type="82">
+    <SOURCE vertex="21"/>
+    <TARGET vertex="80"/>
+  </EDGE>
+  <EDGE type="83">
+    <SOURCE vertex="21"/>
+    <TARGET vertex="57"/>
+  </EDGE>
+  <EDGE type="84">
+    <SOURCE vertex="21"/>
+    <TARGET vertex="62"/>
+  </EDGE>
+  <EDGE type="85">
+    <SOURCE vertex="22"/>
+    <TARGET offset="-1 0" vertex="25"/>
+  </EDGE>
+  <EDGE type="86">
+    <SOURCE vertex="22"/>
+    <TARGET vertex="26"/>
+  </EDGE>
+  <EDGE type="87">
+    <SOURCE vertex="22"/>
+    <TARGET vertex="114"/>
+  </EDGE>
+  <EDGE type="88">
+    <SOURCE vertex="22"/>
+    <TARGET vertex="23"/>
+  </EDGE>
+  <EDGE type="89">
+    <SOURCE vertex="23"/>
+    <TARGET vertex="28"/>
+  </EDGE>
+  <EDGE type="90">
+    <SOURCE vertex="23"/>
+    <TARGET vertex="27"/>
+  </EDGE>
+  <EDGE type="91">
+    <SOURCE vertex="23"/>
+    <TARGET vertex="114"/>
+  </EDGE>
+  <EDGE type="92">
+    <SOURCE vertex="23"/>
+    <TARGET vertex="65"/>
+  </EDGE>
+  <EDGE type="93">
+    <SOURCE vertex="23"/>
+    <TARGET vertex="121"/>
+  </EDGE>
+  <EDGE type="94">
+    <SOURCE vertex="24"/>
+    <TARGET vertex="81"/>
+  </EDGE>
+  <EDGE type="95">
+    <SOURCE vertex="24"/>
+    <TARGET vertex="29"/>
+  </EDGE>
+  <EDGE type="96">
+    <SOURCE vertex="24"/>
+    <TARGET vertex="118"/>
+  </EDGE>
+  <EDGE type="97">
+    <SOURCE vertex="24"/>
+    <TARGET vertex="25"/>
+  </EDGE>
+  <EDGE type="98">
+    <SOURCE vertex="24"/>
+    <TARGET vertex="58"/>
+  </EDGE>
+  <EDGE type="99">
+    <SOURCE vertex="25"/>
+    <TARGET vertex="118"/>
+  </EDGE>
+  <EDGE type="100">
+    <SOURCE vertex="25"/>
+    <TARGET vertex="30"/>
+  </EDGE>
+  <EDGE type="101">
+    <SOURCE vertex="26"/>
+    <TARGET vertex="27"/>
+  </EDGE>
+  <EDGE type="102">
+    <SOURCE vertex="26"/>
+    <TARGET vertex="31"/>
+  </EDGE>
+  <EDGE type="103">
+    <SOURCE vertex="26"/>
+    <TARGET offset="-1 0" vertex="30"/>
+  </EDGE>
+  <EDGE type="104">
+    <SOURCE vertex="27"/>
+    <TARGET vertex="32"/>
+  </EDGE>
+  <EDGE type="105">
+    <SOURCE vertex="27"/>
+    <TARGET vertex="28"/>
+  </EDGE>
+  <EDGE type="106">
+    <SOURCE vertex="28"/>
+    <TARGET vertex="32"/>
+  </EDGE>
+  <EDGE type="107">
+    <SOURCE vertex="28"/>
+    <TARGET vertex="53"/>
+  </EDGE>
+  <EDGE type="108">
+    <SOURCE vertex="28"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="109">
+    <SOURCE vertex="28"/>
+    <TARGET vertex="121"/>
+  </EDGE>
+  <EDGE type="110">
+    <SOURCE vertex="28"/>
+    <TARGET vertex="123"/>
+  </EDGE>
+  <EDGE type="111">
+    <SOURCE vertex="29"/>
+    <TARGET vertex="81"/>
+  </EDGE>
+  <EDGE type="112">
+    <SOURCE vertex="29"/>
+    <TARGET vertex="30"/>
+  </EDGE>
+  <EDGE type="113">
+    <SOURCE vertex="29"/>
+    <TARGET vertex="33"/>
+  </EDGE>
+  <EDGE type="114">
+    <SOURCE vertex="29"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="115">
+    <SOURCE vertex="30"/>
+    <TARGET vertex="34"/>
+  </EDGE>
+  <EDGE type="116">
+    <SOURCE vertex="31"/>
+    <TARGET offset="-1 0" vertex="34"/>
+  </EDGE>
+  <EDGE type="117">
+    <SOURCE vertex="31"/>
+    <TARGET vertex="35"/>
+  </EDGE>
+  <EDGE type="118">
+    <SOURCE vertex="31"/>
+    <TARGET vertex="32"/>
+  </EDGE>
+  <EDGE type="119">
+    <SOURCE vertex="31"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="120">
+    <SOURCE vertex="32"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="121">
+    <SOURCE vertex="32"/>
+    <TARGET vertex="79"/>
+  </EDGE>
+  <EDGE type="122">
+    <SOURCE vertex="32"/>
+    <TARGET vertex="53"/>
+  </EDGE>
+  <EDGE type="123">
+    <SOURCE vertex="33"/>
+    <TARGET vertex="107"/>
+  </EDGE>
+  <EDGE type="124">
+    <SOURCE vertex="33"/>
+    <TARGET vertex="92"/>
+  </EDGE>
+  <EDGE type="125">
+    <SOURCE vertex="33"/>
+    <TARGET vertex="34"/>
+  </EDGE>
+  <EDGE type="126">
+    <SOURCE vertex="33"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="127">
+    <SOURCE vertex="33"/>
+    <TARGET vertex="87"/>
+  </EDGE>
+  <EDGE type="128">
+    <SOURCE vertex="34"/>
+    <TARGET vertex="92"/>
+  </EDGE>
+  <EDGE type="129">
+    <SOURCE vertex="34"/>
+    <TARGET offset="-1 0" vertex="35"/>
+  </EDGE>
+  <EDGE type="130">
+    <SOURCE vertex="35"/>
+    <TARGET vertex="56"/>
+  </EDGE>
+  <EDGE type="131">
+    <SOURCE vertex="35"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="132">
+    <SOURCE vertex="35"/>
+    <TARGET offset="1 0" vertex="92"/>
+  </EDGE>
+  <EDGE type="133">
+    <SOURCE vertex="35"/>
+    <TARGET offset="-1 0" vertex="71"/>
+  </EDGE>
+  <EDGE type="134">
+    <SOURCE vertex="35"/>
+    <TARGET vertex="113"/>
+  </EDGE>
+  <EDGE type="135">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="53"/>
+  </EDGE>
+  <EDGE type="136">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="84"/>
+  </EDGE>
+  <EDGE type="137">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="51"/>
+  </EDGE>
+  <EDGE type="138">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="39"/>
+  </EDGE>
+  <EDGE type="139">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="37"/>
+  </EDGE>
+  <EDGE type="140">
+    <SOURCE vertex="36"/>
+    <TARGET vertex="90"/>
+  </EDGE>
+  <EDGE type="141">
+    <SOURCE vertex="37"/>
+    <TARGET vertex="40"/>
+  </EDGE>
+  <EDGE type="142">
+    <SOURCE vertex="37"/>
+    <TARGET vertex="84"/>
+  </EDGE>
+  <EDGE type="143">
+    <SOURCE vertex="37"/>
+    <TARGET vertex="93"/>
+  </EDGE>
+  <EDGE type="144">
+    <SOURCE vertex="37"/>
+    <TARGET vertex="38"/>
+  </EDGE>
+  <EDGE type="145">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="42"/>
+  </EDGE>
+  <EDGE type="146">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="41"/>
+  </EDGE>
+  <EDGE type="147">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="52"/>
+  </EDGE>
+  <EDGE type="148">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="93"/>
+  </EDGE>
+  <EDGE type="149">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="69"/>
+  </EDGE>
+  <EDGE type="150">
+    <SOURCE vertex="38"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="151">
+    <SOURCE vertex="39"/>
+    <TARGET vertex="97"/>
+  </EDGE>
+  <EDGE type="152">
+    <SOURCE vertex="39"/>
+    <TARGET vertex="44"/>
+  </EDGE>
+  <EDGE type="153">
+    <SOURCE vertex="39"/>
+    <TARGET vertex="40"/>
+  </EDGE>
+  <EDGE type="154">
+    <SOURCE vertex="39"/>
+    <TARGET vertex="51"/>
+  </EDGE>
+  <EDGE type="155">
+    <SOURCE vertex="39"/>
+    <TARGET vertex="108"/>
+  </EDGE>
+  <EDGE type="156">
+    <SOURCE vertex="40"/>
+    <TARGET vertex="45"/>
+  </EDGE>
+  <EDGE type="157">
+    <SOURCE vertex="40"/>
+    <TARGET vertex="41"/>
+  </EDGE>
+  <EDGE type="158">
+    <SOURCE vertex="41"/>
+    <TARGET vertex="46"/>
+  </EDGE>
+  <EDGE type="159">
+    <SOURCE vertex="41"/>
+    <TARGET vertex="42"/>
+  </EDGE>
+  <EDGE type="160">
+    <SOURCE vertex="41"/>
+    <TARGET vertex="86"/>
+  </EDGE>
+  <EDGE type="161">
+    <SOURCE vertex="42"/>
+    <TARGET vertex="86"/>
+  </EDGE>
+  <EDGE type="162">
+    <SOURCE vertex="42"/>
+    <TARGET vertex="77"/>
+  </EDGE>
+  <EDGE type="163">
+    <SOURCE vertex="42"/>
+    <TARGET vertex="100"/>
+  </EDGE>
+  <EDGE type="164">
+    <SOURCE vertex="42"/>
+    <TARGET vertex="69"/>
+  </EDGE>
+  <EDGE type="165">
+    <SOURCE vertex="43"/>
+    <TARGET vertex="48"/>
+  </EDGE>
+  <EDGE type="166">
+    <SOURCE vertex="43"/>
+    <TARGET vertex="113"/>
+  </EDGE>
+  <EDGE type="167">
+    <SOURCE vertex="43"/>
+    <TARGET offset="-1 0" vertex="49"/>
+  </EDGE>
+  <EDGE type="168">
+    <SOURCE vertex="43"/>
+    <TARGET offset="1 0" vertex="82"/>
+  </EDGE>
+  <EDGE type="169">
+    <SOURCE vertex="43"/>
+    <TARGET offset="1 0" vertex="94"/>
+  </EDGE>
+  <EDGE type="170">
+    <SOURCE vertex="43"/>
+    <TARGET vertex="47"/>
+  </EDGE>
+  <EDGE type="171">
+    <SOURCE vertex="43"/>
+    <TARGET offset="-1 0" vertex="50"/>
+  </EDGE>
+  <EDGE type="172">
+    <SOURCE vertex="44"/>
+    <TARGET vertex="124"/>
+  </EDGE>
+  <EDGE type="173">
+    <SOURCE vertex="44"/>
+    <TARGET vertex="97"/>
+  </EDGE>
+  <EDGE type="174">
+    <SOURCE vertex="44"/>
+    <TARGET vertex="45"/>
+  </EDGE>
+  <EDGE type="175">
+    <SOURCE vertex="44"/>
+    <TARGET vertex="115"/>
+  </EDGE>
+  <EDGE type="176">
+    <SOURCE vertex="45"/>
+    <TARGET vertex="46"/>
+  </EDGE>
+  <EDGE type="177">
+    <SOURCE vertex="45"/>
+    <TARGET vertex="115"/>
+  </EDGE>
+  <EDGE type="178">
+    <SOURCE vertex="46"/>
+    <TARGET vertex="115"/>
+  </EDGE>
+  <EDGE type="179">
+    <SOURCE vertex="46"/>
+    <TARGET vertex="86"/>
+  </EDGE>
+  <EDGE type="180">
+    <SOURCE vertex="46"/>
+    <TARGET vertex="78"/>
+  </EDGE>
+  <EDGE type="181">
+    <SOURCE vertex="47"/>
+    <TARGET offset="-1 0" vertex="50"/>
+  </EDGE>
+  <EDGE type="182">
+    <SOURCE vertex="47"/>
+    <TARGET vertex="48"/>
+  </EDGE>
+  <EDGE type="183">
+    <SOURCE vertex="48"/>
+    <TARGET vertex="101"/>
+  </EDGE>
+  <EDGE type="184">
+    <SOURCE vertex="48"/>
+    <TARGET vertex="113"/>
+  </EDGE>
+  <EDGE type="185">
+    <SOURCE vertex="49"/>
+    <TARGET vertex="82"/>
+  </EDGE>
+  <EDGE type="186">
+    <SOURCE vertex="49"/>
+    <TARGET vertex="67"/>
+  </EDGE>
+  <EDGE type="187">
+    <SOURCE vertex="49"/>
+    <TARGET vertex="61"/>
+  </EDGE>
+  <EDGE type="188">
+    <SOURCE vertex="49"/>
+    <TARGET vertex="70"/>
+  </EDGE>
+  <EDGE type="189">
+    <SOURCE vertex="49"/>
+    <TARGET vertex="50"/>
+  </EDGE>
+  <EDGE type="190">
+    <SOURCE vertex="51"/>
+    <TARGET vertex="134"/>
+  </EDGE>
+  <EDGE type="191">
+    <SOURCE vertex="51"/>
+    <TARGET vertex="90"/>
+  </EDGE>
+  <EDGE type="192">
+    <SOURCE vertex="51"/>
+    <TARGET vertex="117"/>
+  </EDGE>
+  <EDGE type="193">
+    <SOURCE vertex="51"/>
+    <TARGET vertex="108"/>
+  </EDGE>
+  <EDGE type="194">
+    <SOURCE vertex="52"/>
+    <TARGET vertex="109"/>
+  </EDGE>
+  <EDGE type="195">
+    <SOURCE vertex="52"/>
+    <TARGET vertex="59"/>
+  </EDGE>
+  <EDGE type="196">
+    <SOURCE vertex="52"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="197">
+    <SOURCE vertex="52"/>
+    <TARGET vertex="93"/>
+  </EDGE>
+  <EDGE type="198">
+    <SOURCE vertex="53"/>
+    <TARGET vertex="90"/>
+  </EDGE>
+  <EDGE type="199">
+    <SOURCE vertex="53"/>
+    <TARGET vertex="84"/>
+  </EDGE>
+  <EDGE type="200">
+    <SOURCE vertex="53"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="201">
+    <SOURCE vertex="53"/>
+    <TARGET vertex="79"/>
+  </EDGE>
+  <EDGE type="202">
+    <SOURCE vertex="54"/>
+    <TARGET vertex="120"/>
+  </EDGE>
+  <EDGE type="203">
+    <SOURCE vertex="54"/>
+    <TARGET vertex="92"/>
+  </EDGE>
+  <EDGE type="204">
+    <SOURCE vertex="54"/>
+    <TARGET vertex="71"/>
+  </EDGE>
+  <EDGE type="205">
+    <SOURCE vertex="54"/>
+    <TARGET vertex="94"/>
+  </EDGE>
+  <EDGE type="206">
+    <SOURCE vertex="54"/>
+    <TARGET vertex="60"/>
+  </EDGE>
+  <EDGE type="207">
+    <SOURCE vertex="55"/>
+    <TARGET vertex="77"/>
+  </EDGE>
+  <EDGE type="208">
+    <SOURCE vertex="55"/>
+    <TARGET vertex="69"/>
+  </EDGE>
+  <EDGE type="209">
+    <SOURCE vertex="55"/>
+    <TARGET vertex="120"/>
+  </EDGE>
+  <EDGE type="210">
+    <SOURCE vertex="55"/>
+    <TARGET vertex="107"/>
+  </EDGE>
+  <EDGE type="211">
+    <SOURCE vertex="55"/>
+    <TARGET vertex="60"/>
+  </EDGE>
+  <EDGE type="212">
+    <SOURCE vertex="56"/>
+    <TARGET vertex="101"/>
+  </EDGE>
+  <EDGE type="213">
+    <SOURCE vertex="56"/>
+    <TARGET vertex="113"/>
+  </EDGE>
+  <EDGE type="214">
+    <SOURCE vertex="56"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="215">
+    <SOURCE vertex="56"/>
+    <TARGET vertex="122"/>
+  </EDGE>
+  <EDGE type="216">
+    <SOURCE vertex="56"/>
+    <TARGET vertex="117"/>
+  </EDGE>
+  <EDGE type="217">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="84"/>
+  </EDGE>
+  <EDGE type="218">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="93"/>
+  </EDGE>
+  <EDGE type="219">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="220">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="62"/>
+  </EDGE>
+  <EDGE type="221">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="109"/>
+  </EDGE>
+  <EDGE type="222">
+    <SOURCE vertex="57"/>
+    <TARGET vertex="59"/>
+  </EDGE>
+  <EDGE type="223">
+    <SOURCE vertex="58"/>
+    <TARGET vertex="81"/>
+  </EDGE>
+  <EDGE type="224">
+    <SOURCE vertex="58"/>
+    <TARGET vertex="118"/>
+  </EDGE>
+  <EDGE type="225">
+    <SOURCE vertex="58"/>
+    <TARGET vertex="104"/>
+  </EDGE>
+  <EDGE type="226">
+    <SOURCE vertex="58"/>
+    <TARGET vertex="75"/>
+  </EDGE>
+  <EDGE type="227">
+    <SOURCE vertex="59"/>
+    <TARGET vertex="109"/>
+  </EDGE>
+  <EDGE type="228">
+    <SOURCE vertex="59"/>
+    <TARGET vertex="91"/>
+  </EDGE>
+  <EDGE type="229">
+    <SOURCE vertex="59"/>
+    <TARGET vertex="62"/>
+  </EDGE>
+  <EDGE type="230">
+    <SOURCE vertex="59"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="231">
+    <SOURCE vertex="60"/>
+    <TARGET vertex="77"/>
+  </EDGE>
+  <EDGE type="232">
+    <SOURCE vertex="60"/>
+    <TARGET vertex="120"/>
+  </EDGE>
+  <EDGE type="233">
+    <SOURCE vertex="60"/>
+    <TARGET vertex="94"/>
+  </EDGE>
+  <EDGE type="234">
+    <SOURCE vertex="60"/>
+    <TARGET vertex="67"/>
+  </EDGE>
+  <EDGE type="235">
+    <SOURCE vertex="60"/>
+    <TARGET vertex="82"/>
+  </EDGE>
+  <EDGE type="236">
+    <SOURCE vertex="61"/>
+    <TARGET offset="0 1" vertex="125"/>
+  </EDGE>
+  <EDGE type="237">
+    <SOURCE vertex="61"/>
+    <TARGET vertex="128"/>
+  </EDGE>
+  <EDGE type="238">
+    <SOURCE vertex="61"/>
+    <TARGET vertex="70"/>
+  </EDGE>
+  <EDGE type="239">
+    <SOURCE vertex="62"/>
+    <TARGET vertex="80"/>
+  </EDGE>
+  <EDGE type="240">
+    <SOURCE vertex="62"/>
+    <TARGET vertex="91"/>
+  </EDGE>
+  <EDGE type="241">
+    <SOURCE vertex="62"/>
+    <TARGET vertex="85"/>
+  </EDGE>
+  <EDGE type="242">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="65"/>
+  </EDGE>
+  <EDGE type="243">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="121"/>
+  </EDGE>
+  <EDGE type="244">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="88"/>
+  </EDGE>
+  <EDGE type="245">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="95"/>
+  </EDGE>
+  <EDGE type="246">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="110"/>
+  </EDGE>
+  <EDGE type="247">
+    <SOURCE vertex="63"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="248">
+    <SOURCE vertex="64"/>
+    <TARGET vertex="97"/>
+  </EDGE>
+  <EDGE type="249">
+    <SOURCE vertex="64"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="250">
+    <SOURCE vertex="64"/>
+    <TARGET vertex="108"/>
+  </EDGE>
+  <EDGE type="251">
+    <SOURCE vertex="65"/>
+    <TARGET vertex="114"/>
+  </EDGE>
+  <EDGE type="252">
+    <SOURCE vertex="65"/>
+    <TARGET vertex="121"/>
+  </EDGE>
+  <EDGE type="253">
+    <SOURCE vertex="65"/>
+    <TARGET vertex="112"/>
+  </EDGE>
+  <EDGE type="254">
+    <SOURCE vertex="65"/>
+    <TARGET vertex="95"/>
+  </EDGE>
+  <EDGE type="255">
+    <SOURCE vertex="66"/>
+    <TARGET vertex="98"/>
+  </EDGE>
+  <EDGE type="256">
+    <SOURCE vertex="66"/>
+    <TARGET vertex="125"/>
+  </EDGE>
+  <EDGE type="257">
+    <SOURCE vertex="66"/>
+    <TARGET vertex="72"/>
+  </EDGE>
+  <EDGE type="258">
+    <SOURCE vertex="66"/>
+    <TARGET vertex="135"/>
+  </EDGE>
+  <EDGE type="259">
+    <SOURCE vertex="67"/>
+    <TARGET vertex="70"/>
+  </EDGE>
+  <EDGE type="260">
+    <SOURCE vertex="67"/>
+    <TARGET vertex="82"/>
+  </EDGE>
+  <EDGE type="261">
+    <SOURCE vertex="67"/>
+    <TARGET vertex="100"/>
+  </EDGE>
+  <EDGE type="262">
+    <SOURCE vertex="67"/>
+    <TARGET vertex="77"/>
+  </EDGE>
+  <EDGE type="263">
+    <SOURCE vertex="68"/>
+    <TARGET vertex="76"/>
+  </EDGE>
+  <EDGE type="264">
+    <SOURCE vertex="68"/>
+    <TARGET vertex="110"/>
+  </EDGE>
+  <EDGE type="265">
+    <SOURCE vertex="68"/>
+    <TARGET vertex="102"/>
+  </EDGE>
+  <EDGE type="266">
+    <SOURCE vertex="68"/>
+    <TARGET vertex="74"/>
+  </EDGE>
+  <EDGE type="267">
+    <SOURCE vertex="68"/>
+    <TARGET vertex="132"/>
+  </EDGE>
+  <EDGE type="268">
+    <SOURCE vertex="69"/>
+    <TARGET vertex="77"/>
+  </EDGE>
+  <EDGE type="269">
+    <SOURCE vertex="69"/>
+    <TARGET vertex="107"/>
+  </EDGE>
+  <EDGE type="270">
+    <SOURCE vertex="69"/>
+    <TARGET vertex="87"/>
+  </EDGE>
+  <EDGE type="271">
+    <SOURCE vertex="69"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="272">
+    <SOURCE vertex="69"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="273">
+    <SOURCE vertex="70"/>
+    <TARGET vertex="86"/>
+  </EDGE>
+  <EDGE type="274">
+    <SOURCE vertex="70"/>
+    <TARGET vertex="128"/>
+  </EDGE>
+  <EDGE type="275">
+    <SOURCE vertex="70"/>
+    <TARGET vertex="100"/>
+  </EDGE>
+  <EDGE type="276">
+    <SOURCE vertex="71"/>
+    <TARGET vertex="94"/>
+  </EDGE>
+  <EDGE type="277">
+    <SOURCE vertex="71"/>
+    <TARGET offset="-1 0" vertex="113"/>
+  </EDGE>
+  <EDGE type="278">
+    <SOURCE vertex="71"/>
+    <TARGET vertex="92"/>
+  </EDGE>
+  <EDGE type="279">
+    <SOURCE vertex="72"/>
+    <TARGET vertex="111"/>
+  </EDGE>
+  <EDGE type="280">
+    <SOURCE vertex="72"/>
+    <TARGET vertex="135"/>
+  </EDGE>
+  <EDGE type="281">
+    <SOURCE vertex="72"/>
+    <TARGET vertex="98"/>
+  </EDGE>
+  <EDGE type="282">
+    <SOURCE vertex="72"/>
+    <TARGET vertex="119"/>
+  </EDGE>
+  <EDGE type="283">
+    <SOURCE vertex="73"/>
+    <TARGET offset="0 1" vertex="132"/>
+  </EDGE>
+  <EDGE type="284">
+    <SOURCE vertex="73"/>
+    <TARGET offset="0 -1" vertex="96"/>
+  </EDGE>
+  <EDGE type="285">
+    <SOURCE vertex="73"/>
+    <TARGET vertex="115"/>
+  </EDGE>
+  <EDGE type="286">
+    <SOURCE vertex="73"/>
+    <TARGET vertex="124"/>
+  </EDGE>
+  <EDGE type="287">
+    <SOURCE vertex="74"/>
+    <TARGET vertex="102"/>
+  </EDGE>
+  <EDGE type="288">
+    <SOURCE vertex="74"/>
+    <TARGET vertex="110"/>
+  </EDGE>
+  <EDGE type="289">
+    <SOURCE vertex="74"/>
+    <TARGET vertex="131"/>
+  </EDGE>
+  <EDGE type="290">
+    <SOURCE vertex="75"/>
+    <TARGET vertex="119"/>
+  </EDGE>
+  <EDGE type="291">
+    <SOURCE vertex="75"/>
+    <TARGET vertex="98"/>
+  </EDGE>
+  <EDGE type="292">
+    <SOURCE vertex="75"/>
+    <TARGET vertex="80"/>
+  </EDGE>
+  <EDGE type="293">
+    <SOURCE vertex="75"/>
+    <TARGET vertex="81"/>
+  </EDGE>
+  <EDGE type="294">
+    <SOURCE vertex="75"/>
+    <TARGET vertex="104"/>
+  </EDGE>
+  <EDGE type="295">
+    <SOURCE vertex="76"/>
+    <TARGET vertex="110"/>
+  </EDGE>
+  <EDGE type="296">
+    <SOURCE vertex="76"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="297">
+    <SOURCE vertex="76"/>
+    <TARGET vertex="83"/>
+  </EDGE>
+  <EDGE type="298">
+    <SOURCE vertex="76"/>
+    <TARGET vertex="132"/>
+  </EDGE>
+  <EDGE type="299">
+    <SOURCE vertex="77"/>
+    <TARGET vertex="100"/>
+  </EDGE>
+  <EDGE type="300">
+    <SOURCE vertex="78"/>
+    <TARGET offset="0 1" vertex="83"/>
+  </EDGE>
+  <EDGE type="301">
+    <SOURCE vertex="78"/>
+    <TARGET offset="0 -1" vertex="89"/>
+  </EDGE>
+  <EDGE type="302">
+    <SOURCE vertex="78"/>
+    <TARGET vertex="86"/>
+  </EDGE>
+  <EDGE type="303">
+    <SOURCE vertex="78"/>
+    <TARGET vertex="128"/>
+  </EDGE>
+  <EDGE type="304">
+    <SOURCE vertex="78"/>
+    <TARGET vertex="115"/>
+  </EDGE>
+  <EDGE type="305">
+    <SOURCE vertex="78"/>
+    <TARGET offset="0 1" vertex="96"/>
+  </EDGE>
+  <EDGE type="306">
+    <SOURCE vertex="79"/>
+    <TARGET vertex="134"/>
+  </EDGE>
+  <EDGE type="307">
+    <SOURCE vertex="79"/>
+    <TARGET vertex="122"/>
+  </EDGE>
+  <EDGE type="308">
+    <SOURCE vertex="79"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="309">
+    <SOURCE vertex="79"/>
+    <TARGET vertex="90"/>
+  </EDGE>
+  <EDGE type="310">
+    <SOURCE vertex="80"/>
+    <TARGET vertex="81"/>
+  </EDGE>
+  <EDGE type="311">
+    <SOURCE vertex="80"/>
+    <TARGET vertex="85"/>
+  </EDGE>
+  <EDGE type="312">
+    <SOURCE vertex="81"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="313">
+    <SOURCE vertex="81"/>
+    <TARGET vertex="91"/>
+  </EDGE>
+  <EDGE type="314">
+    <SOURCE vertex="81"/>
+    <TARGET vertex="85"/>
+  </EDGE>
+  <EDGE type="315">
+    <SOURCE vertex="82"/>
+    <TARGET vertex="94"/>
+  </EDGE>
+  <EDGE type="316">
+    <SOURCE vertex="83"/>
+    <TARGET vertex="132"/>
+  </EDGE>
+  <EDGE type="317">
+    <SOURCE vertex="83"/>
+    <TARGET vertex="96"/>
+  </EDGE>
+  <EDGE type="318">
+    <SOURCE vertex="83"/>
+    <TARGET vertex="89"/>
+  </EDGE>
+  <EDGE type="319">
+    <SOURCE vertex="84"/>
+    <TARGET vertex="93"/>
+  </EDGE>
+  <EDGE type="320">
+    <SOURCE vertex="84"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="321">
+    <SOURCE vertex="85"/>
+    <TARGET vertex="91"/>
+  </EDGE>
+  <EDGE type="322">
+    <SOURCE vertex="86"/>
+    <TARGET vertex="128"/>
+  </EDGE>
+  <EDGE type="323">
+    <SOURCE vertex="86"/>
+    <TARGET vertex="100"/>
+  </EDGE>
+  <EDGE type="324">
+    <SOURCE vertex="87"/>
+    <TARGET vertex="107"/>
+  </EDGE>
+  <EDGE type="325">
+    <SOURCE vertex="87"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="326">
+    <SOURCE vertex="88"/>
+    <TARGET vertex="121"/>
+  </EDGE>
+  <EDGE type="327">
+    <SOURCE vertex="88"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="328">
+    <SOURCE vertex="88"/>
+    <TARGET vertex="123"/>
+  </EDGE>
+  <EDGE type="329">
+    <SOURCE vertex="89"/>
+    <TARGET vertex="135"/>
+  </EDGE>
+  <EDGE type="330">
+    <SOURCE vertex="89"/>
+    <TARGET vertex="111"/>
+  </EDGE>
+  <EDGE type="331">
+    <SOURCE vertex="89"/>
+    <TARGET offset="0 -1" vertex="128"/>
+  </EDGE>
+  <EDGE type="332">
+    <SOURCE vertex="90"/>
+    <TARGET vertex="134"/>
+  </EDGE>
+  <EDGE type="333">
+    <SOURCE vertex="91"/>
+    <TARGET vertex="99"/>
+  </EDGE>
+  <EDGE type="334">
+    <SOURCE vertex="91"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="335">
+    <SOURCE vertex="92"/>
+    <TARGET vertex="107"/>
+  </EDGE>
+  <EDGE type="336">
+    <SOURCE vertex="92"/>
+    <TARGET vertex="120"/>
+  </EDGE>
+  <EDGE type="337">
+    <SOURCE vertex="93"/>
+    <TARGET vertex="109"/>
+  </EDGE>
+  <EDGE type="338">
+    <SOURCE vertex="94"/>
+    <TARGET offset="-1 0" vertex="113"/>
+  </EDGE>
+  <EDGE type="339">
+    <SOURCE vertex="95"/>
+    <TARGET vertex="112"/>
+  </EDGE>
+  <EDGE type="340">
+    <SOURCE vertex="95"/>
+    <TARGET vertex="110"/>
+  </EDGE>
+  <EDGE type="341">
+    <SOURCE vertex="95"/>
+    <TARGET vertex="131"/>
+  </EDGE>
+  <EDGE type="342">
+    <SOURCE vertex="96"/>
+    <TARGET vertex="132"/>
+  </EDGE>
+  <EDGE type="343">
+    <SOURCE vertex="96"/>
+    <TARGET offset="0 -1" vertex="115"/>
+  </EDGE>
+  <EDGE type="344">
+    <SOURCE vertex="97"/>
+    <TARGET vertex="108"/>
+  </EDGE>
+  <EDGE type="345">
+    <SOURCE vertex="97"/>
+    <TARGET vertex="124"/>
+  </EDGE>
+  <EDGE type="346">
+    <SOURCE vertex="97"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="347">
+    <SOURCE vertex="98"/>
+    <TARGET vertex="119"/>
+  </EDGE>
+  <EDGE type="348">
+    <SOURCE vertex="98"/>
+    <TARGET vertex="105"/>
+  </EDGE>
+  <EDGE type="349">
+    <SOURCE vertex="98"/>
+    <TARGET vertex="125"/>
+  </EDGE>
+  <EDGE type="350">
+    <SOURCE vertex="98"/>
+    <TARGET vertex="116"/>
+  </EDGE>
+  <EDGE type="351">
+    <SOURCE vertex="98"/>
+    <TARGET vertex="104"/>
+  </EDGE>
+  <EDGE type="352">
+    <SOURCE vertex="99"/>
+    <TARGET vertex="106"/>
+  </EDGE>
+  <EDGE type="353">
+    <SOURCE vertex="101"/>
+    <TARGET vertex="113"/>
+  </EDGE>
+  <EDGE type="354">
+    <SOURCE vertex="101"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="355">
+    <SOURCE vertex="101"/>
+    <TARGET vertex="117"/>
+  </EDGE>
+  <EDGE type="356">
+    <SOURCE vertex="103"/>
+    <TARGET vertex="118"/>
+  </EDGE>
+  <EDGE type="357">
+    <SOURCE vertex="103"/>
+    <TARGET vertex="104"/>
+  </EDGE>
+  <EDGE type="358">
+    <SOURCE vertex="103"/>
+    <TARGET vertex="129"/>
+  </EDGE>
+  <EDGE type="359">
+    <SOURCE vertex="104"/>
+    <TARGET vertex="118"/>
+  </EDGE>
+  <EDGE type="360">
+    <SOURCE vertex="104"/>
+    <TARGET vertex="129"/>
+  </EDGE>
+  <EDGE type="361">
+    <SOURCE vertex="104"/>
+    <TARGET vertex="116"/>
+  </EDGE>
+  <EDGE type="362">
+    <SOURCE vertex="105"/>
+    <TARGET vertex="116"/>
+  </EDGE>
+  <EDGE type="363">
+    <SOURCE vertex="107"/>
+    <TARGET vertex="120"/>
+  </EDGE>
+  <EDGE type="364">
+    <SOURCE vertex="108"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="365">
+    <SOURCE vertex="108"/>
+    <TARGET vertex="117"/>
+  </EDGE>
+  <EDGE type="366">
+    <SOURCE vertex="110"/>
+    <TARGET vertex="127"/>
+  </EDGE>
+  <EDGE type="367">
+    <SOURCE vertex="110"/>
+    <TARGET vertex="131"/>
+  </EDGE>
+  <EDGE type="368">
+    <SOURCE vertex="111"/>
+    <TARGET vertex="119"/>
+  </EDGE>
+  <EDGE type="369">
+    <SOURCE vertex="111"/>
+    <TARGET vertex="135"/>
+  </EDGE>
+  <EDGE type="370">
+    <SOURCE vertex="112"/>
+    <TARGET offset="-1 0" vertex="129"/>
+  </EDGE>
+  <EDGE type="371">
+    <SOURCE vertex="112"/>
+    <TARGET vertex="114"/>
+  </EDGE>
+  <EDGE type="372">
+    <SOURCE vertex="115"/>
+    <TARGET vertex="124"/>
+  </EDGE>
+  <EDGE type="373">
+    <SOURCE vertex="116"/>
+    <TARGET vertex="129"/>
+  </EDGE>
+  <EDGE type="374">
+    <SOURCE vertex="117"/>
+    <TARGET vertex="134"/>
+  </EDGE>
+  <EDGE type="375">
+    <SOURCE vertex="117"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="376">
+    <SOURCE vertex="117"/>
+    <TARGET vertex="122"/>
+  </EDGE>
+  <EDGE type="377">
+    <SOURCE vertex="121"/>
+    <TARGET vertex="123"/>
+  </EDGE>
+  <EDGE type="378">
+    <SOURCE vertex="122"/>
+    <TARGET vertex="134"/>
+  </EDGE>
+  <EDGE type="379">
+    <SOURCE vertex="122"/>
+    <TARGET vertex="130"/>
+  </EDGE>
+  <EDGE type="380">
+    <SOURCE vertex="123"/>
+    <TARGET vertex="133"/>
+  </EDGE>
+  <EDGE type="381">
+    <SOURCE vertex="124"/>
+    <TARGET offset="0 -1" vertex="132"/>
+  </EDGE>
+  <EDGE type="382">
+    <SOURCE vertex="124"/>
+    <TARGET vertex="126"/>
+  </EDGE>
+  <EDGE type="383">
+    <SOURCE vertex="125"/>
+    <TARGET vertex="135"/>
+  </EDGE>
+  <EDGE type="384">
+    <SOURCE vertex="125"/>
+    <TARGET offset="0 1" vertex="128"/>
+  </EDGE>
+  <EDGE type="385">
+    <SOURCE vertex="128"/>
+    <TARGET offset="0 1" vertex="135"/>
+  </EDGE>
+</UNITCELL>
+\
+""")
+
+    s = Sample(2, 2, 2)
+    s.compute_info()
+    assert (ETree.dump(ref_unitcell) == ETree.dump(s.xml_unitcell()))
+    clear_info(s)
