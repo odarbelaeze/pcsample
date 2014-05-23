@@ -3577,3 +3577,44 @@ def test_xml_unitcell_default():
     s.compute_info()
     assert (ETree.dump(ref_unitcell) == ETree.dump(s.xml_unitcell()))
     clear_info(s)
+
+
+def test_xml_latticegraph_defaults():
+    s = Sample(2, 2, 2)
+    latticegraph = s.xml_latticegraph()
+    assert('ref="' + s.finite_lattice_name() in ETree.tostring(latticegraph))
+    assert('ref="' + s.unitcell_name() in ETree.tostring(latticegraph))
+    assert('ref="' + s.lattice_name() not in ETree.tostring(latticegraph))
+
+
+def test_xml_latticegraph_no_ref_finite_lattice():
+    s = Sample(2, 2, 2)
+    latticegraph = s.xml_latticegraph(ref_finite_lattice=False)
+    assert(
+        'ref="' + s.finite_lattice_name() not in ETree.tostring(latticegraph)
+    )
+    assert('ref="' + s.unitcell_name() in ETree.tostring(latticegraph))
+    assert('ref="' + s.lattice_name() in ETree.tostring(latticegraph))
+
+
+def test_xml_latticegraph_no_ref_finite_lattice_no_ref_lattice():
+    s = Sample(2, 2, 2)
+    latticegraph = s.xml_latticegraph(
+        ref_finite_lattice=False,
+        ref_lattice=False
+    )
+    assert(
+        'ref="' + s.finite_lattice_name() not in ETree.tostring(latticegraph)
+    )
+    assert('ref="' + s.unitcell_name() in ETree.tostring(latticegraph))
+    assert('ref="' + s.lattice_name() not in ETree.tostring(latticegraph))
+
+
+def test_xml_latticegraph_no_ref_unitcell():
+    s = Sample(2, 2, 2)
+    s.compute_info()
+    latticegraph = s.xml_latticegraph(ref_unitcell=False)
+    assert('ref="' + s.finite_lattice_name() in ETree.tostring(latticegraph))
+    assert('ref="' + s.unitcell_name() not in ETree.tostring(latticegraph))
+    assert('ref="' + s.lattice_name() not in ETree.tostring(latticegraph))
+    clear_info(s)

@@ -247,7 +247,7 @@ class Sample(object):
             self.rad, self.d, self.l, self.a
         )
 
-    def xml_finite_lattice(self, ref_lattice=True):
+    def xml_finite_lattice(self, ref_lattice=True, **kwargs):
         finite_lattice = ETree.Element('FINITELATTICE', attrib={
             'name': self.finite_lattice_name(),
             'dimension': '2'
@@ -278,7 +278,7 @@ class Sample(object):
             self.rad, self.d, self.l, self.a
         )
 
-    def xml_unitcell(self, vertex_types=True, edge_types=True):
+    def xml_unitcell(self, vertex_types=True, edge_types=True, **kwargs):
         info = self.load_info()
         n_cut = np.shape(self.in_circles())[0]
 
@@ -334,3 +334,23 @@ class Sample(object):
                 ETree.SubElement(edge, 'TARGET', attrib=target_info)
 
         return unitcell
+
+    def xml_latticegraph(self, **kwargs):
+        latticegraph = ETree.Element('LATTICEGRAPH')
+
+        ref_finite_lattice = kwargs.get('ref_finite_lattice', True)
+        ref_unitcell = kwargs.get('ref_unitcell', True)
+
+        if ref_finite_lattice:
+            ETree.SubElement(latticegraph, 'FINITELATTICE',
+                             attrib={'ref': self.finite_lattice_name()})
+        else:
+            latticegraph.append(self.xml_finite_lattice(**kwargs))
+
+        if ref_unitcell:
+            ETree.SubElement(latticegraph, 'UNITCELL',
+                             attrib={'ref': self.unitcell_name()})
+        else:
+            latticegraph.append(self.xml_unitcell(**kwargs))
+
+        return latticegraph
