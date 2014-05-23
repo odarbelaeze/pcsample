@@ -120,7 +120,8 @@ class Sample(object):
         mask = utils.in_circles_mask(
             np.mod(positions, self.super_cell_size()),
             self.centers(),
-            self.rad)
+            self.rad
+        )
         return positions[mask]
 
     def out_circles(self):
@@ -200,6 +201,7 @@ class Sample(object):
 
         nb_files = {
             'np': open(self.temp_prefix + 'np.vol', 'r'),
+            'fp': open(self.temp_prefix + 'pxpy.vol', 'r'),
             'px': open(self.temp_prefix + 'px.vol', 'r'),
             'py': open(self.temp_prefix + 'py.vol', 'r'),
         }
@@ -214,7 +216,7 @@ class Sample(object):
             for line in nb_files[key]:
                 pl = [int(number) for number in line.split()]
                 vertex_id = pl[0]
-                if key == 'np':
+                if key == 'fp' or key == 'np':
                     info[vertex_id][key] = [nb for nb in pl[1:] if nb > 0]
                 else:
                     info[vertex_id][key] = [
@@ -272,7 +274,63 @@ class Sample(object):
         return finite_lattice
 
     def unitcell_name(self):
-        pass
+        return 'composed r{0!s} d{1!s} l{2!s} a{3!s}'.format(
+            self.rad, self.d, self.l, self.a
+        )
 
     def xml_unitcell(self, vertex_types=True, edge_types=True):
-        pass
+        info = self.load_info()
+        n_cut = np.shape(self.in_circles())[0]
+
+        cell_info = {
+            'name': self.unitcell_name(),
+            'dimension': '2',
+            'vertices': str(len(info)),
+        }
+        unitcell = ETree.Element('UNITCELL', attrib=cell_info)
+
+        for vid in info:
+            attrib = {'id': str(vid + 1)}
+            if vertex_types:
+                attrib.update({'type': '1' if vid < n_cut else '2'})
+            vertex = ETree.SubElement(unitcell, 'VERTEX', attrib=attrib)
+            position = info[vid]['coordinates'][:2] / self.size()
+            text = "{r[0]} {r[1]}".format(r=position)
+            ETree.SubElement(vertex, 'COORDINATE').text = text
+
+        def __offset_info(ri, rj, ox, oy):
+            if ox or oy:
+                offx = 0 if ox else 1 if (rj[0] < ri[0]) else - 1
+                offy = 0 if oy else 1 if (rj[1] < ri[1]) else - 1
+                return {'ofset': str(offx) + ' ' + str(offy)}
+            else:
+                return dict()
+
+        etype = 1
+
+        for vid in info:
+            for nbid in info[vid]['fp']:
+                if nbid < vid:
+                    continue
+
+                edge_info = {}
+                if edge_types:
+                    edge_info.update({'type': str(etype)})
+                    etype += 1
+
+                vpos = info[vid]['coordinates']
+                nbpos = info[nbid]['coordinates']
+                ox = nbid in info[vid]['px']
+                oy = nbid in info[vid]['py']
+
+                edge = ETree.SubElement(unitcell, 'EDGE', attrib=edge_info)
+
+                source_info = {'vertex': str(vid + 1)}
+                offset_info = __offset_info(vpos, nbpos, ox, oy)
+                target_info = {'vertex': str(nbid + 1)}
+                target_info.update(offset_info)
+
+                ETree.SubElement(edge, 'SOURCE', attrib=source_info)
+                ETree.SubElement(edge, 'TARGET', attrib=target_info)
+
+        return unitcell
