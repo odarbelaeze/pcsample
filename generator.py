@@ -40,7 +40,7 @@ def main():
 
     params += '\n'.join(
         [
-            '{LATTICE="' + sample.finite_lattice_name() + '";' +
+            '{LATTICE="' + sample.latticegraph_name() + '";' +
             'T= ' + str(T) + ';}'
             for sample in samples
             for T in np.arange(1.0, 5.0, 0.1)

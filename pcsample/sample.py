@@ -335,8 +335,14 @@ class Sample(object):
 
         return unitcell
 
+    def latticegraph_name(self):
+        return 'composed single square hex r{0!s} d{1!s} l{2!s} a{3!s}'.format(
+            self.rad, self.d, self.l, self.a
+        )
+
     def xml_latticegraph(self, **kwargs):
-        latticegraph = ETree.Element('LATTICEGRAPH')
+        latticegraph_info = {'name': self.latticegraph_name()}
+        latticegraph = ETree.Element('LATTICEGRAPH', attrib=latticegraph_info)
 
         ref_finite_lattice = kwargs.get('ref_finite_lattice', True)
         ref_unitcell = kwargs.get('ref_unitcell', True)

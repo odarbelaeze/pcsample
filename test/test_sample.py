@@ -3579,6 +3579,11 @@ def test_xml_unitcell_default():
     clear_info(s)
 
 
+def test_latticegraph_name_defaults():
+    s = Sample(2, 2, 2)
+    assert(s.latticegraph_name() == 'composed single square hex r2 d2 l2 a1.0')
+
+
 def test_xml_latticegraph_defaults():
     s = Sample(2, 2, 2)
     latticegraph = s.xml_latticegraph()
